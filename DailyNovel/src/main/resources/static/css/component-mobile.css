@@ -708,7 +708,24 @@ color: white;
 
 /* feeling */
 
+.feeling-wrapper {
+  display: grid;
+/*   grid-template-areas: 
+ */    /* "a b c"
+    "p1 p2 p3"
+    "d e f"
+    "p4 p5 p6"
+    "g h i"
+    "p7 p8 p9"; */
+  grid-template-rows: 5rem 1.3rem 5rem 1.3rem 5rem 1.3rem;
+  grid-template-columns: repeat(3, 5rem);
+  justify-content: center;
+  align-content: center;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  place-items: center;
 
+}
 
 .btn-feeling {
     font-size: 1.1rem;
@@ -765,13 +782,6 @@ color: white;
     height: 16em;
     background-image: url(../img/happiness/happy.png);
     justify-self: center;
-}
-.lc-feeling-view-alignment{
-    display: flex;
-    width: 20rem;
-    height: 20rem;
-    flex-direction: column;
-    align-items: center;
 }
 
 .lc-space-around{
