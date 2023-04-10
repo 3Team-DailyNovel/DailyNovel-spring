@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.dailynovel.web.entity.Diary;
 import com.dailynovel.web.entity.DiaryPreview;
+import com.dailynovel.web.entity.DiaryView;
 import com.dailynovel.web.repository.DiaryRepository;
 
 @Service
@@ -18,31 +19,50 @@ public class DefaultDiaryService implements DiaryService {
 	@Autowired
 	private DiaryRepository repository;
 	
+
 	@Override
-	public Diary viewDiary() {
+	public Diary Diary(Integer id) {
 		// TODO Auto-generated method stub
-		return null;
+		Diary d = repository.view(id);
+		
+		return d;
+	}
+
+	@Override
+	public DiaryView viewDiary(Integer id) {
+		// TODO Auto-generated method stub
+		DiaryView d2 = repository.findDiaryView(id);
+		
+		return d2;
 	}
 	
+	
 	@Override
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'dev' of https://github.com/3Team-DailyNovel/DailyNovel-spring.git
 	public void insertDiary(Diary diary) {
 		repository.register(diary);		
+<<<<<<< HEAD
+=======
+
+	}	
+	
+	@Override
+	public int modifyDiary(Diary diary) {
+		
+		return 0;
+>>>>>>> branch 'dev' of https://github.com/3Team-DailyNovel/DailyNovel-spring.git
 	}
 	
+	@Override
+	public int removeDiary() {
+		
+		return 0;
+	}
+
 	
-
-	@Override
-	public int updateDiary() {
-		// TODO Auto-generated method stub
-		return 1;
-	}
-
-	@Override
-	public int deleteDiary() {
-		// TODO Auto-generated method stub
-		return 1;
-	}
 
 	public Map<Integer, ArrayList<DiaryPreview>> getPreview(int year,int month){
 	//담을 객체 선언만 한거
@@ -62,5 +82,4 @@ public class DefaultDiaryService implements DiaryService {
 		}
 		return diaryMap;
 	}
-
 }
