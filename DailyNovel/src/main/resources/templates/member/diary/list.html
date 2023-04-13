@@ -60,7 +60,7 @@
 				
 			</div>
 	<hr>
-			<ul class="lists">
+			<ul class="lists" id = "diaryList">
 				<li class="list-box" th:each="diary : ${list}" th:onclick="|location.href='@{/member/diary/detail(diaryId=${diary.id})}'|">
 					<div class="list-date lc-center h2 font-weight-bolder mgt-2" th:text="${#dates.format(diary.regDate, 'yyyy-MM-dd')}">2022-22-22</div>
 					<div class="list-title mgt-3" th:text="${diary.title}">오늘은 힘든 하루</div>
