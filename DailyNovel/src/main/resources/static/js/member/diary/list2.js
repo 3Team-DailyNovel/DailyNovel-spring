@@ -151,14 +151,26 @@ let renewList=function(){
   let fid = btnTitle[1].dataset.id;
   let wid = btnTitle[2].dataset.id;
   let regDate = modalBtn.dataset.regDate;
-  
+  let backgroundY= "#c8c000"; //노랑
+  let backgroundG = "#69bc80" //초록
+  // background-color: #ffff77; // 노랑   color-bg-yellow-1
+  // background-color: #9aefb0; // 초록   color-bg-green-1
+  let templateStyle = btnTitle[0].style
+  let feelingStyle = btnTitle[1].style
+  let weatherStyle = btnTitle[2].style
+  let dateStyle = modalBtn.style
+  console.log()
+  tid?templateStyle.backgroundColor=backgroundY:templateStyle.backgroundColor=backgroundG
+  fid?feelingStyle.backgroundColor=backgroundY:feelingStyle.backgroundColor=backgroundG
+  wid?weatherStyle.backgroundColor=backgroundY:weatherStyle.backgroundColor=backgroundG
+  regDate?dateStyle.backgroundColor=backgroundY:dateStyle.backgroundColor=backgroundG
   //GET 방식 AJAX이기 때문에 쿼리스트링 제작
   let queryString =""; 
   queryString += tid?`&tid=${tid}`:"";
   queryString += fid?`&fid=${fid}`:"";
   queryString += wid?`&wid=${wid}`:"";
-  queryString += regDate?`&reg_date=${regDate}`:"";
-  console.log(queryString);
+  queryString += regDate?`&regDate=${regDate}`:"";
+  // console.log(queryString);
   //Ajax를 활용하여 데이터 받아오기
   var requestOptions = {
     method: 'GET',
@@ -167,46 +179,48 @@ let renewList=function(){
   // /diarys/getList?tid=1&wid=1&fid=1&regDate=2023-04-11
 
   let UserDiaryList;
+  let diaryindex
+
   fetch(`/diarys/getList?${queryString}`, requestOptions)
     .then(response => response.json())
     .then(result => {
       UserDiaryList=result
-      console.log(UserDiaryList);
-
+      diaryindex = UserDiaryList.length;
+      // console.log(UserDiaryList);
+        // console.log("있는겨");
       //제대로 값을 받아왔다면 화면에 뿌리기(list 개수만큼)
       let htmlString = "";
-
-
-        //일기가 있을 때
-        for(let diary of UserDiaryList){
-          htmlString+=`
-              <li class="list-box">
-                <div class="list-date lc-center h2 font-weight-bolder mgt-2" data-id = ${diary.id}>${formatDate(new Date(diary.regDate))}</div>
-                <div class="list-title mgt-3">${diary.title}</div>
-                <div class="content mgt-2">${diary.content}</div>
-              </li>
-          `
-        }   
+    if(diaryindex != 0){
+      // console.log("일기있음");
+      for(let diary of UserDiaryList){
+        htmlString+=`
+        <li class="list-box" data-id = ${diary.id}>
+        <div class="list-date lc-center h2 font-weight-bolder mgt-2">${formatDate(new Date(diary.regDate))}</div>
+        <div class="list-title mgt-3">${diary.title}</div>
+        <div class="content mgt-2">${diary.content}</div>
+        </li>
+        `
+      }
+    }
+    else{
+      //일기가 있을 때
+      // console.log("일기없음");
+        htmlString =`	        	
+          <li class="list-box">
+            <div class="list-date lc-center h2 font-weight-bolder mgt-2">${modalBtn.dataset.regDate}</div>
+            <div class="content mgt-5 lc-center h1" > 일기가 없어요!</div>
+          </li>`
+    }   
       ListDOM.innerHTML = htmlString;  
       
         //다이어리에 클릭 이벤트 붙이기
       const Dlist = ListDOM.querySelectorAll("li")
-      console.log(Dlist);
-      for(let diary of Dlist)
-      {
-        console.log(diary);
-        diary.onclick= () =>{window.location.href=`/member/diary/detail?diaryId=${diary.dataset.id}}`}
+      if(diaryindex){
+        for(let diary of Dlist)
+          diary.onclick= () =>{window.location.href=`/member/diary/detail?diaryId=${diary.dataset.id}`}
       }
     })
-    .catch(error => {
-              //일기가 하나도 없을 때
-        htmlString +=`	        	
-          <li class="list-box">
-            <div class="list-date lc-center h2 font-weight-bolder mgt-2">다시 한번 확인해주세요</div>
-            <div class="content mgt-5 lc-center h1" > 일기가 없어요!</div>
-          </li>`
-      ListDOM.innerHTML = htmlString;
-
+    .catch(error => {console.log(error);
     });
 
 }
