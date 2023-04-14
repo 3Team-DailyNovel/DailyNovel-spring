@@ -22,12 +22,15 @@ class slide{
 
         // 페이지네이션 생성
         this.pagination = document.querySelector(pagination);
-
+        console.log(this.maxSlide)
         for (let i = 0; i < this.maxSlide; i++) {
         if (i === 0) this.pagination.innerHTML += `<li class="active">•</li>`;
         else this.pagination.innerHTML += `<li>•</li>`;
         }
-
+        if(this.maxSlide >5){
+            this.pagination.style.gap="0";
+            console.log(this.pagination.style);
+        }
         this.paginationItems = document.querySelectorAll(paginationItems);
 
         this.startPoint = 0;

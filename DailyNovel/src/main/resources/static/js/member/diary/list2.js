@@ -205,9 +205,10 @@ let renewList=function(){
     else{
       //일기가 있을 때
       // console.log("일기없음");
+      let stringTitle = modalBtn.dataset.regDate?modalBtn.dataset.regDate:"다시 한번 확인해 주세요.";
         htmlString =`	        	
           <li class="list-box">
-            <div class="list-date lc-center h2 font-weight-bolder mgt-2">${modalBtn.dataset.regDate}</div>
+            <div class="list-date lc-center h2 font-weight-bolder mgt-2">${stringTitle}</div>
             <div class="content mgt-5 lc-center h1" > 일기가 없어요!</div>
           </li>`
     }   
@@ -220,8 +221,7 @@ let renewList=function(){
           diary.onclick= () =>{window.location.href=`/member/diary/detail?diaryId=${diary.dataset.id}`}
       }
     })
-    .catch(error => {console.log(error);
-    });
+    .catch(error => null);
 
 }
 
