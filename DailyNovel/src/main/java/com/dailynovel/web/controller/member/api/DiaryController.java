@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
@@ -43,16 +44,6 @@ public class DiaryController {
 		return list;
 	}
 
-	// @PostMapping
-	// public String insert(@RequestBody Diary diary) {
-	// service.insertDiary(diary);
-	//
-	// diary.setMemberId(1);
-	//
-	//
-	// System.out.println(diary);
-	// return "ㄷ...될까..?";
-	// }
 
 	@PostMapping
 	public String insert(@RequestBody Map<String, Object> dry
@@ -159,4 +150,20 @@ public class DiaryController {
 		return id + "완료";
 	}
 
+	
+	@GetMapping("getList")
+	public List<Diary> getDiaryList(
+			@RequestParam(required=false) Integer tid,
+			@RequestParam(required=false) Integer fid,
+			@RequestParam(required=false) Integer wid,
+			@RequestParam(required=false) String regDate,
+			HttpSession session) {
+//		int memberid = (int) session.getAttribute("id");
+		System.out.println("이게 날짜"+regDate);
+		int memberid = (int)session.getAttribute("id");
+		List<Diary> list = service.getAllByCriterion(memberid, tid, fid, wid, regDate);
+		System.out.println(list);
+//		System.out.println("이거한번봐봐"+ list.get(0).getRegDate().toString());
+		return list;
+	}
 }

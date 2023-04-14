@@ -2,9 +2,7 @@ package com.dailynovel.web.controller.user;
 
 import java.util.Random;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -13,19 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.HttpServerErrorException;
 
 import com.dailynovel.web.service.MemberService;
-
 import com.dailynovel.web.service.SignupService;
 
 import ch.qos.logback.core.model.Model;
-import io.micrometer.core.ipc.http.HttpSender.Request;
-import io.micrometer.core.ipc.http.HttpSender.Response;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.websocket.Session;
 
 
 @RequestMapping("/user/")

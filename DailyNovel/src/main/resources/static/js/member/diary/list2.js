@@ -57,7 +57,8 @@ const close = () => {
 calModalBg = document.querySelector(".list-modal .bg").onclick=function(){
   modalBtn.textContent = "날짜";
   modalBtn.dataset.regDate = "";
-   exceQuery();
+  //  exceQuery();
+  renewList();
   close();
 }
 //모달창 js 끝!
@@ -82,9 +83,9 @@ for(let op of optionList){
     if(opClickedBtn.textContent=="선택안함"){
       opClickedBtn.textContent=op.dataset.default;
     }
-    exceQuery();
-    
-     console.log(query);
+    // exceQuery();
+    renewList();
+    //  console.log(query);
   }
 }
 // 2. calendar의 list 눌렀을 때, 날짜의 reg-date 와 value가 변경되도록
@@ -98,15 +99,16 @@ calendar.onclick=function(e) {
   //누른게 LI가 아니라면 안함!
 //  console.log(cursor);
   if(cursor.tagName != 'SPAN')return;
-  console.log("클릭!");
+  // console.log("클릭!");
   for(let a of cursor.classList){
     if( a=='inactive') return;
   }
   //모달버튼 
-	console.log(cursor.textContent);
+	// console.log(cursor.textContent);
   // modalBtn.textContent = `${yearMonth.dataset.regDate}-${cursor.textContent}`;
   modalBtn.dataset.regDate = `${yearMonth.dataset.regDate}-${String(cursor.textContent).padStart(2,"0")}`
-   exceQuery();
+  //  exceQuery();
+  renewList();
   close();
 };
 
@@ -118,25 +120,122 @@ let exceQuery=function(){
   let fid = btnTitle[1].dataset.id;
   let wid = btnTitle[2].dataset.id;
   let regDate = modalBtn.dataset.regDate;
-  console.log(modalBtn);
-  console.log(regDate);
+  // console.log(modalBtn);
+  // console.log(regDate);
   let queryString =""; 
   queryString += tid?`&tid=${tid}`:"";
   queryString += fid?`&fid=${fid}`:"";
   queryString += wid?`&wid=${wid}`:"";
   queryString += regDate?`&reg_date=${regDate}`:"";
-  console.log(queryString);
+  // console.log(queryString);
   // let regDatequery=new URLSearchParams(window.location.search).get('reg_date');
 //  queryString += new URLSearchParams(window.location.search).get('reg_date')?`&reg_date=${regDate}`:"";
   // console.log(`wid=${wid} // fid=${fid} // tid=${tid}`);
   // let query = `?wid=${wid?wid:""}&fid=${fid?fid:""}&tid=${tid?tid:""}&reg_date=${regDate?regDate:""}`;
   // console.log(new URLSearchParams(window.location.search).get('reg_date'));
   //======== 실제 url로 이동하는 코드 ========
-    if(queryString != "")
-      location.href = (`./list?${queryString}`);
-      else
-      location.href = (`./list`);
+    // if(queryString != "")
+    //   location.href = (`./list?${queryString}`);
+    //   else
+    //   location.href = (`./list`);
   
 };
 
 
+let renewList=function(){
+
+  //Dom 선언
+  const ListDOM = document.querySelector("#diaryList");
+  //각각 버튼의 dataset 에서 data를 받아온다.
+  let tid = btnTitle[0].dataset.id;
+  let fid = btnTitle[1].dataset.id;
+  let wid = btnTitle[2].dataset.id;
+  let regDate = modalBtn.dataset.regDate;
+  let backgroundY= "#c8c000"; //노랑
+  let backgroundG = "#69bc80" //초록
+  // background-color: #ffff77; // 노랑   color-bg-yellow-1
+  // background-color: #9aefb0; // 초록   color-bg-green-1
+  let templateStyle = btnTitle[0].style
+  let feelingStyle = btnTitle[1].style
+  let weatherStyle = btnTitle[2].style
+  let dateStyle = modalBtn.style
+  console.log()
+  tid?templateStyle.backgroundColor=backgroundY:templateStyle.backgroundColor=backgroundG
+  fid?feelingStyle.backgroundColor=backgroundY:feelingStyle.backgroundColor=backgroundG
+  wid?weatherStyle.backgroundColor=backgroundY:weatherStyle.backgroundColor=backgroundG
+  regDate?dateStyle.backgroundColor=backgroundY:dateStyle.backgroundColor=backgroundG
+  //GET 방식 AJAX이기 때문에 쿼리스트링 제작
+  let queryString =""; 
+  queryString += tid?`&tid=${tid}`:"";
+  queryString += fid?`&fid=${fid}`:"";
+  queryString += wid?`&wid=${wid}`:"";
+  queryString += regDate?`&regDate=${regDate}`:"";
+  // console.log(queryString);
+  //Ajax를 활용하여 데이터 받아오기
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  // /diarys/getList?tid=1&wid=1&fid=1&regDate=2023-04-11
+
+  let UserDiaryList;
+  let diaryindex
+
+  fetch(`/diarys/getList?${queryString}`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      UserDiaryList=result
+      diaryindex = UserDiaryList.length;
+      // console.log(UserDiaryList);
+        // console.log("있는겨");
+      //제대로 값을 받아왔다면 화면에 뿌리기(list 개수만큼)
+      let htmlString = "";
+    if(diaryindex != 0){
+      // console.log("일기있음");
+      for(let diary of UserDiaryList){
+        htmlString+=`
+        <li class="list-box" data-id = ${diary.id}>
+        <div class="list-date lc-center h2 font-weight-bolder mgt-2">${formatDate(new Date(diary.regDate))}</div>
+        <div class="list-title mgt-3">${diary.title}</div>
+        <div class="content mgt-2">${diary.content}</div>
+        </li>
+        `
+      }
+    }
+    else{
+      //일기가 있을 때
+      // console.log("일기없음");
+      let stringTitle = modalBtn.dataset.regDate?modalBtn.dataset.regDate:"다시 한번 확인해 주세요.";
+        htmlString =`	        	
+          <li class="list-box">
+            <div class="list-date lc-center h2 font-weight-bolder mgt-2">${stringTitle}</div>
+            <div class="content mgt-5 lc-center h1" > 일기가 없어요!</div>
+          </li>`
+    }   
+      ListDOM.innerHTML = htmlString;  
+      
+        //다이어리에 클릭 이벤트 붙이기
+      const Dlist = ListDOM.querySelectorAll("li")
+      if(diaryindex){
+        for(let diary of Dlist)
+          diary.onclick= () =>{window.location.href=`/member/diary/detail?diaryId=${diary.dataset.id}`}
+      }
+    })
+    .catch(error => null);
+
+}
+
+//날짜 포맷팅
+function formatDate(date) {
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+
+  // 필요한 경우, 2자리 숫자로 맞춰주는 코드
+  month = month < 10 ? '0' + month : month;
+  day = day < 10 ? '0' + day : day;
+  // 출력할 형식 지정
+  var formattedDate = year + '-' + month + '-' + day;
+  
+  return formattedDate;
+}
