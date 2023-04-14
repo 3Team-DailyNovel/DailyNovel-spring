@@ -6,7 +6,7 @@ window.onload = function() {
 	const params = new URLSearchParams(queryString);
 	const diaryId = params.get('diaryId');
 
-    console.log(diaryId);
+    // console.log(diaryId);
 
 
     deleteYesBtn.addEventListener('click', ()=>{

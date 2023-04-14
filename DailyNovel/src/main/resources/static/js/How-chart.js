@@ -10,7 +10,7 @@ fetch("http://localhost:8080/analysis1/how?how=\"\"&count=1", requestOptions)
 		  return {name:template.name, count:template.count}
 	  });
   
-  console.log(extractedData);
+  // console.log(extractedData);
 
 
 
