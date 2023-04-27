@@ -57,15 +57,19 @@ public class UserController {
 			@RequestParam(required = true) String nickname,
 			@RequestParam(required = true) String phoneNum
 			) {
-		signupService.signup(id,pwd,nickname,phoneNum);
+		
+		String password=	service.PasswordEncoder(pwd);
+		signupService.signup(id,password,nickname,phoneNum);
 		return "/user/login";
 	}
 	
 	@RequestMapping("mailCheck")
 	public String mailCheck(String email , HttpSession session) throws Exception{
 		
-		int authCode = service.randNum();
+		String authCode = service.randNum();
 		boolean mailCheck= service.mailCheck(email, authCode, "회원가입 인증메일 입니다.", "이메일 인증번호:");
+		session.setAttribute("authCode", authCode);
+
 		if(mailCheck)
 			return "true";		
 		return "false";
@@ -83,10 +87,9 @@ public class UserController {
 	
 	@RequestMapping("emailCheckNum")
 	public String emailCheckNum(int emailCheckNum , HttpSession session){
-
 		int passwordChangeAuthCode =(int) session.getAttribute("authCode");
 		if(emailCheckNum==passwordChangeAuthCode) {	
-			int checkNum = service.randNum();
+			String checkNum = service.randNum();
 		    session.setAttribute("passwordChangeauthCode", checkNum);
 			return "true";
 		}

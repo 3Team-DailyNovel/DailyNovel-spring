@@ -3,8 +3,11 @@ package com.dailynovel.web.service;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +20,10 @@ import jakarta.mail.internet.MimeMessage;
 @Service
 public class DefaultMemberService implements MemberService {
 
+		
+	@Autowired
+	private PasswordEncoder encoder;
+	
 	@Autowired
 	private JavaMailSenderImpl sender;	
 	
@@ -115,7 +122,7 @@ public class DefaultMemberService implements MemberService {
 	}
 
 	@Override
-	public boolean mailCheck(String email, int authCode, String Subject, String Text) {
+	public boolean mailCheck(String email, String authCode, String Subject, String Text) {
 		
 		int checkEmail = repository.getFindId(email);
 		if(checkEmail != 1) {
@@ -141,11 +148,17 @@ public class DefaultMemberService implements MemberService {
 	}
 	
 	@Override
-	public int randNum() {
+	public String randNum() {
 		Random rand = new Random();
-		int randNum = rand.nextInt(999999);
-		
+		String randNum = Integer.toString(rand.nextInt(999999));
+	
 		return randNum;
+	}
+
+	@Override
+	public String PasswordEncoder(String pwd) {
+		String password = encoder.encode(pwd);
+		return password;
 	}
 
 

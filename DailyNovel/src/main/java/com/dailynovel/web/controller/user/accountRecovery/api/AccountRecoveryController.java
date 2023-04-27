@@ -33,19 +33,13 @@ public class AccountRecoveryController {
 		if (checkEmail == 1) {
 			String uuid = UUID.randomUUID().toString().replaceAll("-", ""); // -를 제거해 주었다.
 			uuid = uuid.substring(0, 15); // uuid를 앞에서부터 10자리 잘라줌.
-			System.out.println(uuid);
+
 			boolean temporaryPassword = service.temporaryPassword(email, uuid);
 			if (temporaryPassword) {
-				MimeMessage message = sender.createMimeMessage();
-				// use the true flag to indicate you need a multipart message
-				MimeMessageHelper helper = new MimeMessageHelper(message, false);
-				helper.setTo(email);
-				helper.setSubject("DailyNovel 임시 비밀번호 메일입니다.");
-				// use the true flag to indicate the text included is HTML
-				helper.setText("<html><body>임시 비밀번호:" + uuid + "</body></html>", true);
-				// let's include the infamous windows Sample file (this time copied to c:/)
-				sender.send(message);
-				return "true";
+				boolean mailCheck= service.mailCheck(email, uuid, "임시 비밀번호 메일 입니다.", "임시 비밀번호:");
+				if(mailCheck)
+					return "true";		
+				return "false";
 			}
 			return "false";
 		}

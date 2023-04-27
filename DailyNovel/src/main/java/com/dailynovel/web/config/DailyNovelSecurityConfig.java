@@ -3,11 +3,13 @@ package com.dailynovel.web.config;
 import javax.sql.DataSource;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,8 +23,10 @@ import org.springframework.security.web.SecurityFilterChain;
 // https://www.baeldung.com/spring-security-thymeleaf
 
 @Configuration
+@EnableWebSecurity
 public class DailyNovelSecurityConfig {
 	
+
 	
 	@Autowired
 	private DataSource dataSource;
@@ -102,7 +106,7 @@ public class DailyNovelSecurityConfig {
 	
 	//3. LDAP 서비스
 //	@Bean
-	public UserDetailsService rlandUserDetialsService() {
+	public UserDetailsService DailyNovelUserDetialsService() {
 		
 		
 		

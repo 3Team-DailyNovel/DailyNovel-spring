@@ -20,5 +20,5 @@ public class UserController {
 		return "/user/sign-up";
 		
 	}
-	
+
 }
